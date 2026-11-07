@@ -1,0 +1,2 @@
+document.addEventListener('DOMContentLoaded',function(){var host=document.querySelector('.mapwrap');if(!host)return;fetch('magtora-map-block.html?stable=1').then(function(r){if(!r.ok)throw new Error('map block unavailable');return r.text()}).then(function(html){host.innerHTML=html;host.classList.add('magtora-map-host');host.querySelectorAll('script').forEach(function(oldScript){var s=document.createElement('script');s.textContent=oldScript.textContent;document.body.appendChild(s)})}).catch(function(error){console.error(error)})});
+

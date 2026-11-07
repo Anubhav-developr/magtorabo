@@ -1,0 +1,1 @@
+export const villages=[['Magtora (Main)','c','0 km'],['Kudra','s','1.3 km'],['Bhulbhulaganj','s','2 km*'],['Jatav Gautiya','s','–'],['Faridapur','s','2.6 km'],['Kahar Gautiya','s','3.6 km*'],['Umarpur','s','4.6 km*'],['Maghreta','n','0.8 km'],['Kona Yakubpur','n','2.9 km'],['Rapra','w','0.95 km'],['Chachhuapur','w','1.65 km']];

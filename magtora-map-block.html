@@ -1,0 +1,235 @@
+<!--
+  MAGTORA MAP BLOCK  (sirf map ka part)
+  ---------------------------------------------------------------
+  Features : Zoom +/-/reset, mouse-wheel, drag-pan, pinch-zoom (mobile),
+             double-tap zoom, gaon select par auto-zoom, layer toggles,
+             landmarks (school/mandir/theka), "aas-paas" panel,
+             Google Maps links (search / directions / nearby),
+             optional Google Maps embed view (bina API key).
+  Use      : <div id="mg-map"></div>  +  MagtoraMap.init("#mg-map", {...})
+  Hooks    : onSelect(village)  -> apne detail card ko update karne ke liye
+             MagtoraMap.select("kudra")  -> bahar se gaon select karne ke liye
+  NOTE     : Map schematic hai (scale ke hisaab se nahi). Coordinates SVG units mein hain.
+-->
+<style>
+.mgmap{--bg:#e7f1d4;--card:#fffdf8;--ink:#14262e;--mut:#66747b;--line:#e6dcc4;--navy:#12303d;--gold:#d9a94a;--red:#d3202a;--blue:#2f6fe0;--green:#2f9e44;--dirt:#c28a45;--main:#4a565d;position:relative;font-family:Poppins,"Noto Sans Devanagari",system-ui,sans-serif;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+@media (prefers-color-scheme:dark){.mgmap{--bg:#1a2e22;--card:#17262e;--ink:#eef2f3;--mut:#9fb0b8;--line:#2a3d47;--main:#9aa7ad}}
+.mgmap *{box-sizing:border-box}
+.mg-stage{position:relative;aspect-ratio:800/720;background:var(--bg);touch-action:none;cursor:grab}
+.mg-stage:active{cursor:grabbing}
+.mg-stage svg,.mg-stage iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.mg-stage iframe{display:none}.mgmap.gview .mg-stage iframe{display:block}.mgmap.gview .mg-stage svg{display:none}
+.mg-tools{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px;z-index:3}
+.mg-tools button{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:700 20px/1 Poppins,sans-serif;cursor:pointer;box-shadow:0 3px 8px rgba(0,0,0,.15)}
+.mg-tools button:hover{background:#fff2c7;color:#12303d}
+.mg-zoom{position:absolute;left:10px;bottom:10px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:3px 10px;font-size:12px;font-weight:600;z-index:3}
+.mg-layers{display:flex;gap:6px;flex-wrap:wrap;padding:10px 12px;border-top:1px solid var(--line)}
+.mg-chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:6px 12px;font:600 12.5px Poppins,"Noto Sans Devanagari",sans-serif;cursor:pointer}
+.mg-chip.on{background:var(--navy);color:#ffd24a;border-color:var(--navy)}
+.mg-near{padding:12px 14px;border-top:1px solid var(--line);font-size:13.5px;line-height:1.5}
+.mg-near h4{margin:0 0 6px;font-size:14px}.mg-near a{display:inline-block;margin:4px 6px 0 0;padding:5px 11px;border-radius:99px;background:#fff2c7;color:#3a2a00;border:1px solid #e6c66a;text-decoration:none;font-weight:600;font-size:12.5px}
+.mg-near .lm{display:inline-block;margin:2px 6px 0 0;padding:3px 10px;border-radius:10px;background:var(--bg);font-weight:600;font-size:12.5px}
+/* svg styling */
+.rd{fill:none;stroke-linecap:round;stroke-linejoin:round;transition:opacity .25s}
+.rd.main{stroke:var(--main);stroke-width:15}.rd.blue{stroke:var(--blue);stroke-width:8}.rd.red{stroke:var(--red);stroke-width:8;opacity:.85}.rd.green{stroke:var(--green);stroke-width:8}.rd.dirt{stroke:var(--dirt);stroke-width:8;stroke-dasharray:3 9}
+svg.has .rd{opacity:.22}svg.has .rd.hl{opacity:1}
+.cl{fill:none;stroke:#fff;stroke-width:1.6;stroke-dasharray:9 9;opacity:.8}
+.v{cursor:pointer;outline:none}.v .sc{transform:scale(var(--k,1))}
+.v .pin{fill:var(--red);stroke:#fff;stroke-width:2.5}.v:hover .pin{fill:#ff6a3d}.v.on .pin{fill:#ffb400;stroke:#12303d}
+.v .lb{font:600 12.5px Poppins,sans-serif;fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:4;stroke-linejoin:round}
+.v.on .lb{font-weight:700}.v.on .sc{transform:scale(calc(var(--k,1)*1.25))}
+.lm-g{cursor:pointer}.lm-g .sc{transform:scale(var(--k,1))}.lm-g text{font:600 11px "Noto Sans Devanagari",Poppins,sans-serif;fill:var(--mut);paint-order:stroke;stroke:var(--card);stroke-width:3.5}
+.hide-lm .lm-g,.hide-lb .lb{display:none}
+</style>
+
+<div class="mgmap" id="mg-map-root">
+  <div class="mg-stage" id="mg-stage">
+    <svg id="mg-svg" viewBox="0 0 800 720" role="group" aria-label="Magtora B.O. village map">
+      <g id="mg-roads">
+        <path class="rd main" data-r="main"  d="M400,700 L400,420 Q402,300 470,230 Q520,192 650,186"/>
+        <path class="rd main"                d="M650,186 L760,235" opacity=".9"/>
+        <path class="rd main" data-r="spur"  style="stroke-width:10" d="M401,372 L490,372"/>
+        <path class="rd blue" data-r="lane"  d="M560,196 L560,112"/>
+        <path class="rd dirt" data-r="kona"  d="M640,188 Q690,160 718,108"/>
+        <path class="rd dirt" data-r="rdirt" d="M400,332 L318,332"/>
+        <path class="rd green" data-r="rpaved" d="M318,332 Q260,348 232,356"/>
+        <path class="rd green" data-r="chach" d="M232,356 Q165,350 150,300 L142,278"/>
+        <path class="rd red"  data-r="bhul"  d="M400,492 Q320,496 246,486"/>
+        <path class="rd red"  data-r="jatav" d="M400,566 Q320,566 262,578"/>
+        <path class="rd red"  data-r="kahar" d="M400,640 Q340,662 270,652 L206,648"/>
+        <path class="rd red"  data-r="umar"  d="M206,648 Q130,640 114,560"/>
+      </g>
+      <path class="cl" d="M400,698 L400,422 Q402,302 470,232 Q520,194 650,188"/>
+      <!-- Post office building -->
+      <g><rect x="490" y="318" width="120" height="84" rx="10" fill="#fff" stroke="#cdbf9f" stroke-width="2"/>
+      <rect x="482" y="306" width="136" height="16" rx="4" fill="#9c3b2b"/><rect x="505" y="328" width="90" height="24" rx="4" fill="#d3202a"/>
+      <text x="550" y="346" text-anchor="middle" font-size="14" font-weight="700" fill="#fff" font-family="Noto Sans Devanagari,FreeSans,sans-serif">भारतीय डाक</text>
+      <rect x="540" y="362" width="20" height="40" fill="#7a4a2a"/></g>
+      <g id="mg-landmarks"></g>
+      <g id="mg-pins"></g>
+    </svg>
+    <iframe id="mg-gframe" title="Google Maps" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <div class="mg-tools">
+      <button id="mg-in"  aria-label="Zoom in">+</button>
+      <button id="mg-out" aria-label="Zoom out">−</button>
+      <button id="mg-fit" aria-label="Reset view" style="font-size:15px">⤢</button>
+    </div>
+    <div class="mg-zoom" id="mg-zoomlbl">100%</div>
+  </div>
+  <div class="mg-layers" id="mg-layers"></div>
+  <div class="mg-near" id="mg-near"></div>
+</div>
+
+<script>
+/* =============== MagtoraMap =============== */
+(function(){
+  var NS="http://www.w3.org/2000/svg", BASE={w:800,h:720}, MIN_W=140, MAX_W=800;
+  var CITY="Shahjahanpur, Uttar Pradesh";
+  var DEFAULT_VILLAGES=[ /* id, name, x, y, routes to highlight */
+    {id:"magtora",n:"Magtora",x:550,y:300,r:["spur"]},
+    {id:"kudra",n:"Kudra",x:400,y:450,r:["main"]},
+    {id:"bhulbhulaganj",n:"Bhulbhulaganj",x:246,y:486,r:["main","bhul"]},
+    {id:"jatav-gautiya",n:"Jatav Gautiya",x:262,y:578,r:["main","jatav"]},
+    {id:"faridapur",n:"Faridapur",x:400,y:610,r:["main"]},
+    {id:"kahar-gautiya",n:"Kahar Gautiya",x:206,y:648,r:["main","kahar"]},
+    {id:"umarpur",n:"Umarpur",x:114,y:560,r:["main","kahar","umar"]},
+    {id:"maghreta",n:"Maghreta",x:560,y:108,r:["main","lane"]},
+    {id:"kona-yakubpur",n:"Kona Yakubpur",x:718,y:104,r:["main","kona"]},
+    {id:"rapra",n:"Rapra",x:232,y:356,r:["main","rdirt","rpaved"]},
+    {id:"chachhuapur",n:"Chachhuapur",x:142,y:278,r:["main","rdirt","rpaved","chach"]}];
+  /* Landmarks: yahan aur add kar sakte ho (sirf wahi jo confirmed ho).
+     near = kin gaon ke raste mein padta hai */
+  var DEFAULT_LANDMARKS=[
+    {id:"school",n:"विद्यालय",ic:"🏫",x:560,y:145,near:["maghreta"]},
+    {id:"theka",n:"शराब का ठेका",ic:"🏪",x:400,y:628,near:["faridapur","kahar-gautiya","umarpur"]},
+    {id:"mandir",n:"मंदिर",ic:"🛕",x:310,y:664,near:["kahar-gautiya","umarpur"]}];
+  /* Google Maps "aas-paas" searches */
+  var NEARBY=[["school","स्कूल"],["temple","मंदिर"],["ATM","ATM"],["hospital","अस्पताल"],["petrol pump","पेट्रोल पंप"],["bank","बैंक"],["post office","डाकघर"],["medical store","दवाई"]];
+
+  var S={view:{x:0,y:0,w:BASE.w,h:BASE.h},sel:null,opts:null,V:[],L:[],layers:{landmarks:true,labels:true,google:false}};
+  var DETAILS={magtora:[0,["मगटोरा शाखा डाकघर पूरे नेटवर्क का केंद्र-बिंदु है","जलालाबाद रोड से छोटी सड़क पूर्व की ओर डाकघर तक जाती है"]],kudra:[1.3,["मगटोरा से जलालाबाद रोड पर दक्षिण चलें","1.3 km पर Kudra मुख्य सड़क पर आता है"]],bhulbhulaganj:[2,["Kudra से थोड़ा आगे बढ़ें","दायीं ओर की branch सड़क लें","यह Bhulbhulaganj को जोड़ती है"]],"jatav-gautiya":[null,["Kudra से सीधे आगे चलें","Faridapur से पहले दायीं ओर पतली पक्की सड़क जाती है"]],faridapur:[2.6,["Kudra से सीधे जलालाबाद रोड पर चलते रहें","Kudra से 1.3 km आगे Faridapur आता है"]],"kahar-gautiya":[3.6,["Faridapur से थोड़ा आगे दायीं ओर सड़क मुड़ती है","रास्ते में मंदिर पड़ता है; सड़क पक्की है"]],umarpur:[4.6,["Kahar Gautiya के आगे उसी रास्ते पर जाएँ","आगे Umarpur पड़ता है"]],maghreta:[0.8,["पतली पक्की lane से उत्तर की ओर जाएँ","विद्यालय के ठीक आगे Maghreta है"]],"kona-yakubpur":[2.9,["मुख्य सड़क से पहले मुड़ें","आगे का रास्ता कच्चा है"]],rapra:[0.95,["पहले कच्चा रास्ता लें","फिर पतली पक्की सड़क Rapra तक जाती है"]],chachhuapur:[1.65,["Rapra की ओर जाएँ","Rapra से आगे Chachhuapur है"]]};
+  var $=function(q,r){return (r||document).querySelector(q)};
+  var svg,stage,root;
+
+  function setView(v,anim){
+    var w=Math.max(MIN_W,Math.min(MAX_W,v.w)), h=w*BASE.h/BASE.w;
+    var x=Math.max(-40,Math.min(BASE.w-w+40,v.x)), y=Math.max(-40,Math.min(BASE.h-h+40,v.y));
+    S.view={x:x,y:y,w:w,h:h};
+    svg.setAttribute("viewBox",x+" "+y+" "+w+" "+h);
+    svg.style.setProperty("--k",(w/BASE.w).toFixed(3));           // pins/labels screen-size constant rakhta hai
+    $("#mg-zoomlbl",root).textContent=Math.round(BASE.w/w*100)+"%";
+  }
+  function zoomAt(f,cx,cy){ // f>1 zoom in; (cx,cy) svg coordinates
+    var v=S.view, nw=v.w/f; nw=Math.max(MIN_W,Math.min(MAX_W,nw)); var r=nw/v.w;
+    setView({x:cx-(cx-v.x)*r,y:cy-(cy-v.y)*r,w:nw});
+  }
+  function toSvg(ev){var p=svg.createSVGPoint();p.x=ev.clientX;p.y=ev.clientY;return p.matrixTransform(svg.getScreenCTM().inverse())}
+  function center(){return {x:S.view.x+S.view.w/2,y:S.view.y+S.view.h/2}}
+  function animateTo(t,ms){ // smooth fly-to
+    var a=S.view,st=performance.now(); ms=ms||450;
+    (function step(n){var k=Math.min(1,(n-st)/ms),e=1-Math.pow(1-k,3);
+      setView({x:a.x+(t.x-a.x)*e,y:a.y+(t.y-a.y)*e,w:a.w+(t.w-a.w)*e}); if(k<1)requestAnimationFrame(step)})(st);
+  }
+
+  function bindGestures(){
+    var ptrs=new Map(),last=null,pinch=null,moved=false;
+    svg.addEventListener("click",function(e){var node=e.target.closest&&e.target.closest(".v");if(node&&node.dataset.id){e.stopPropagation();select(node.dataset.id)}});
+    stage.addEventListener("wheel",function(e){e.preventDefault();var p=toSvg(e);zoomAt(e.deltaY<0?1.2:1/1.2,p.x,p.y)},{passive:false});
+    stage.addEventListener("dblclick",function(e){var p=toSvg(e);zoomAt(e.shiftKey?0.5:2,p.x,p.y)});
+    stage.addEventListener("pointerdown",function(e){if(e.target.closest(".mg-tools")||e.target.closest(".v"))return;stage.setPointerCapture(e.pointerId);ptrs.set(e.pointerId,e);moved=false;
+      if(ptrs.size===1)last={x:e.clientX,y:e.clientY}; if(ptrs.size===2){var a=[...ptrs.values()];pinch=Math.hypot(a[0].clientX-a[1].clientX,a[0].clientY-a[1].clientY)}});
+    stage.addEventListener("pointermove",function(e){if(!ptrs.has(e.pointerId))return;ptrs.set(e.pointerId,e);
+      if(ptrs.size===2){var a=[...ptrs.values()],d=Math.hypot(a[0].clientX-a[1].clientX,a[0].clientY-a[1].clientY);
+        var mid=toSvg({clientX:(a[0].clientX+a[1].clientX)/2,clientY:(a[0].clientY+a[1].clientY)/2});if(pinch)zoomAt(d/pinch,mid.x,mid.y);pinch=d;moved=true;return}
+      if(ptrs.size===1&&last){var dx=e.clientX-last.x,dy=e.clientY-last.y;if(Math.abs(dx)+Math.abs(dy)>2)moved=true;
+        var sc=S.view.w/stage.clientWidth;setView({x:S.view.x-dx*sc,y:S.view.y-dy*sc,w:S.view.w});last={x:e.clientX,y:e.clientY}}});
+    function up(e){ptrs.delete(e.pointerId);pinch=null;last=ptrs.size?{x:[...ptrs.values()][0].clientX,y:[...ptrs.values()][0].clientY}:null}
+    stage.addEventListener("pointerup",up);stage.addEventListener("pointercancel",up);
+    stage.addEventListener("click",function(e){if(e.target.closest&&e.target.closest(".v"))return;if(moved){e.stopPropagation();e.preventDefault()}},true); // drag ke baad accidental select nahi
+  }
+
+  function el(n,attrs,html){var e=document.createElementNS(NS,n);for(var k in attrs)e.setAttribute(k,attrs[k]);if(html)e.innerHTML=html;return e}
+  function drawPins(){
+    var g=$("#mg-pins",root);g.innerHTML="";
+    S.V.forEach(function(v){
+      var p=el("g",{"class":"v",tabindex:0,role:"button","aria-label":v.n,transform:"translate("+v.x+","+v.y+")"});
+      p.dataset.id=v.id;
+      var lx=v.x>600?-24:16,ly=-18,anchor=v.x>600?"end":"start";
+      if(v.id==="maghreta"){lx=18;ly=-42;anchor="start"} if(v.id==="kona-yakubpur"){lx=-22;ly=-62;anchor="end"}
+      p.innerHTML='<g class="sc" style="transform-origin:0 0"><path class="pin" d="M0,0 c-4,-9 -12,-15 -12,-24 a12,12 0 1 1 24,0 c0,9 -8,15 -12,24z"/><circle cx="0" cy="-24" r="4" fill="#fff"/><text class="lb" x="'+lx+'" y="'+ly+'" text-anchor="'+anchor+'">'+v.n+'</text></g>';
+      function choose(e){if(e){e.preventDefault();e.stopPropagation()}select(v.id);if(typeof window.sel==="function"){window.sel(v.id);if(typeof window.renderList==="function")window.renderList()}try{history.replaceState(null,"","#"+v.id)}catch(err){location.hash=v.id}}
+      p.addEventListener("pointerup",choose);
+      p.addEventListener("click",choose);
+      p.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();select(v.id)}});
+      g.appendChild(p)});
+  }
+  function drawLandmarks(){
+    var g=$("#mg-landmarks",root);g.innerHTML="";
+    S.L.forEach(function(l){
+      var p=el("g",{"class":"lm-g",transform:"translate("+l.x+","+l.y+")"});
+      p.innerHTML='<g class="sc" style="transform-origin:0 0"><text font-size="20" text-anchor="middle" y="6">'+l.ic+'</text><text x="0" y="24" text-anchor="middle">'+l.n+'</text></g>';
+      g.appendChild(p)});
+  }
+  function drawLayers(){
+    var box=$("#mg-layers",root);box.innerHTML="";
+    [["landmarks","📍 Landmarks"],["labels","🔤 नाम"],["google","🗺️ Google Maps view"]].forEach(function(l){
+      var b=document.createElement("button");b.className="mg-chip"+(S.layers[l[0]]?" on":"");b.textContent=l[1];
+      b.onclick=function(){S.layers[l[0]]=!S.layers[l[0]];applyLayers();drawLayers()};box.appendChild(b)});
+  }
+  function gq(extra){return encodeURIComponent((extra?extra+" near ":"")+(S.sel?S.sel.n+", ":"Magtora, ")+CITY)}
+  function applyLayers(){
+    svg.classList.toggle("hide-lm",!S.layers.landmarks);svg.classList.toggle("hide-lb",!S.layers.labels);
+    root.classList.toggle("gview",S.layers.google);
+    if(S.layers.google)$("#mg-gframe",root).src="https://www.google.com/maps?q="+gq()+"&z=15&output=embed"; // key ki zarurat nahi
+  }
+  function drawNear(){
+    var box=$("#mg-near",root),v=S.sel;
+    if(!v){box.innerHTML='<h4>आस-पास</h4><span style="color:var(--mut)">किसी गाँव पर टैप करें — landmarks और Google Maps की nearby search यहाँ दिखेंगी।</span>';return}
+    var lms=S.L.filter(function(l){return l.near.indexOf(v.id)>-1});
+    var h='<h4>'+v.n+' के आस-पास / रास्ते में</h4>'+
+      (lms.length?lms.map(function(l){return'<span class="lm">'+l.ic+' '+l.n+'</span>'}).join(""):'<span style="color:var(--mut)">कोई confirmed landmark नहीं जुड़ा।</span>')+
+      '<div style="margin-top:8px"><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+gq()+'">📍 Google Maps में खोलें</a>'+
+      '<a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination='+gq()+'&travelmode=driving">🧭 रास्ता</a></div><div style="margin-top:4px">'+
+      NEARBY.map(function(n){return'<a target="_blank" rel="noopener" href="https://www.google.com/maps/search/'+encodeURIComponent(n[0])+'+near+'+gq().replace(/^.*?near/,"")+'" >'+n[1]+'</a>'}).join("")+'</div>';
+    box.innerHTML=h;
+  }
+
+  function select(id,noFly){
+    var v=S.V.filter(function(x){return x.id===id})[0];S.sel=v||null;
+    svg.classList.toggle("has",!!v);
+    svg.querySelectorAll(".rd").forEach(function(r){r.classList.toggle("hl",!!v&&v.r.indexOf(r.dataset.r)>-1)});
+    svg.querySelectorAll(".v").forEach(function(p){p.classList.toggle("on",!!v&&p.dataset.id===id)});
+    drawNear(); if(S.layers.google)applyLayers();
+    if(v&&!noFly)animateTo({x:v.x-S.view.w/2,y:v.y-S.view.h/2,w:Math.min(S.view.w,360)});
+    if(S.opts.onSelect)S.opts.onSelect(v||null);
+    var detail=document.getElementById('detail');
+    if(detail&&v){var info=DETAILS[v.id]||[null,[v.n+' का रास्ता map पर highlight किया गया है।']],dist=info[0]===null?'—':info[0];detail.innerHTML='<div class="dh"><div><h3>'+v.n+'</h3><span class="badge">गाँव विवरण</span></div><div class="dist"><b>'+dist+'</b><small>'+(dist==='—'?'दूरी अपुष्ट':'km मगटोरा से')+'</small></div></div><span class="chip">📍 चुना हुआ स्थान</span><ol class="steps">'+info[1].map(function(s){return'<li>'+s+'</li>'}).join('')+'</ol>'}
+  }
+
+  window.MagtoraMap={
+    init:function(sel,opts){
+      opts=opts||{};S.opts=opts;S.V=opts.villages||DEFAULT_VILLAGES;S.L=opts.landmarks||DEFAULT_LANDMARKS;
+      CITY=opts.city||CITY;
+      var host=typeof sel==="string"?document.querySelector(sel):sel;
+      /* block ka markup host ke andar le aao */
+      var tpl=document.getElementById("mg-map-root");if(tpl&&tpl.parentNode!==host){host.appendChild(tpl)}
+      root=tpl;svg=$("#mg-svg",root);stage=$("#mg-stage",root);
+      $("#mg-in",root).onclick=function(){var c=center();zoomAt(1.5,c.x,c.y)};
+      $("#mg-out",root).onclick=function(){var c=center();zoomAt(1/1.5,c.x,c.y)};
+      $("#mg-fit",root).onclick=function(){animateTo({x:0,y:0,w:BASE.w})};
+      bindGestures();drawLandmarks();drawPins();drawLayers();applyLayers();setView(S.view);drawNear();
+      return window.MagtoraMap;
+    },
+    select:select,
+    zoomIn:function(){var c=center();zoomAt(1.5,c.x,c.y)},
+    zoomOut:function(){var c=center();zoomAt(1/1.5,c.x,c.y)},
+    reset:function(){animateTo({x:0,y:0,w:BASE.w})}
+  };
+})();
+
+/* ---------- Demo mount (apne app mein ise hata dena) ---------- */
+MagtoraMap.init(document.getElementById("mg-map-root").parentNode,{
+  onSelect:function(v){if(window.MagtoraMapOnSelect)window.MagtoraMapOnSelect(v)}
+});
+</script>
+

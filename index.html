@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
-    <title>पोस्ट ऑफिस मगतोरा – गाँव व रूट गाइड</title>
+    <title>पोस्ट ऑफिस मगटोरा – गाँव व रूट गाइड</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       rel="stylesheet"
@@ -494,13 +494,143 @@
         font-size: 12px;
         line-height: 1.6;
       }
-    </style>
-  </head>
+    </style></head
+  ><style>
+    .staff-photo {
+      overflow: hidden;
+    }
+    .staff-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  </style>
+  <script defer src="map-bridge.js"></script>
+  <style>
+    .project-tools {
+      max-width: 1280px;
+      margin: 12px auto;
+      padding: 0 18px;
+      text-align: right;
+    }
+    .project-tools button {
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 7px 12px;
+      margin-left: 6px;
+      cursor: pointer;
+    }
+    .staff-contacts {
+      max-width: 1280px;
+      margin: 25px auto;
+      padding: 0 18px;
+    }
+    .staff-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+    @media (max-width: 700px) {
+      .staff-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .staff-card,
+    .address-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: 0 10px 25px #0001;
+    }
+    .staff-photo {
+      width: 82px;
+      height: 82px;
+      border: 2px dashed #cdbf9f;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: var(--mut);
+      float: left;
+      margin-right: 14px;
+    }
+    .staff-card h3 {
+      margin: 0;
+      padding-top: 16px;
+    }
+    .staff-card small {
+      color: var(--mut);
+    }
+    .staff-field {
+      clear: both;
+      margin-top: 12px;
+      padding: 9px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+    }
+    .staff-field b {
+      display: block;
+      font-size: 11px;
+      color: var(--mut);
+    }
+    .staff-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      clear: both;
+    }
+    .staff-actions a,
+    .address-card a {
+      padding: 9px 12px;
+      border-radius: 10px;
+      background: var(--navy);
+      color: #fff;
+      text-decoration: none;
+    }
+    .staff-actions a:last-child {
+      background: #25d366;
+    }
+    .address-card {
+      margin-top: 18px;
+    }
+    .address-card a {
+      display: inline-block;
+      margin: 8px 8px 0 0;
+    }
+    .office-status {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      background: #e7f6eb;
+      color: #217a36;
+    }
+    .office-status.closed {
+      background: #fde8e8;
+      color: #a52828;
+    }
+    :root[data-theme="dark"] {
+      --bg: #0f1a20;
+      --card: #17262e;
+      --ink: #eef2f3;
+      --mut: #9fb0b8;
+      --line: #2a3d47;
+      --navy: #0b141a;
+    }
+  </style>
   <body>
+    <div class="project-tools">
+      <button id="themeToggle">🌙 Dark</button
+      ><button id="languageToggle">English</button>
+    </div>
     <header>
       <div class="top">
         <div>
-          <h1>पोस्ट ऑफिस <span>मगतोरा</span></h1>
+          <h1>पोस्ट ऑफिस <span>मगटोरा</span></h1>
           <p class="sub">
             शाखा डाकघर • उप डाकघर जलालाबाद • जिला शाहजहाँपुर • पिन 242221
           </p>
@@ -514,6 +644,16 @@
     </header>
     <main>
       <section class="card mapwrap">
+        <style>
+          .mapwrap > .mhead,
+          .mapwrap > svg {
+            display: none !important;
+          }</style
+        ><iframe
+          src="magtora-map-block.html"
+          title="Magtora interactive map"
+          style="width: 100%; height: 760px; border: 0; border-radius: 16px"
+        ></iframe>
         <div class="mhead">
           <h2>गाँव का रोड नेटवर्क · किसी भी गाँव पर टैप करें</h2>
           <div class="legend">
@@ -651,7 +791,7 @@
     </main>
     <footer>
       स्केमैटिक फील्ड मैप – स्केल के अनुसार नहीं, GPS सर्वे नहीं। * वाली दूरी
-      नोटबुक के जुड़े हुए खंडों का जोड़ (अनुमानित) है। “दायाँ” = मगतोरा से
+      नोटबुक के जुड़े हुए खंडों का जोड़ (अनुमानित) है। “दायाँ” = मगटोरा से
       फरीदापुर की ओर जाते समय। आधिकारिक उपयोग से पहले दूरी व स्पेलिंग की जाँच
       करें।
     </footer>
@@ -674,7 +814,7 @@
           s: "गाँव की सड़क (मुख्य सड़क से जुड़ी)",
           r: ["spur"],
           st: [
-            "मगतोरा शाखा डाकघर पूरे नेटवर्क का केंद्र-बिंदु है",
+            "मगटोरा शाखा डाकघर पूरे नेटवर्क का केंद्र-बिंदु है",
             "जलालाबाद रोड से एक छोटी सड़क पूर्व की ओर डाकघर तक जाती है",
           ],
         },
@@ -689,7 +829,7 @@
           s: "मुख्य पक्की सड़क",
           r: ["main"],
           st: [
-            "मगतोरा से जलालाबाद रोड पर सीधे दक्षिण चलें",
+            "मगटोरा से जलालाबाद रोड पर सीधे दक्षिण चलें",
             "1.3 km पर Kudra मुख्य सड़क पर ही आता है",
           ],
         },
@@ -705,7 +845,7 @@
           r: ["main", "bhul"],
           st: [
             "Kudra से थोड़ा आगे बढ़ें",
-            "मगतोरा से आते हुए दायीं ओर की सड़क लें",
+            "मगटोरा से आते हुए दायीं ओर की सड़क लें",
             "यह सीधे Bhulbhulaganj को जोड़ती है (Kudra से ~0.7 km)",
           ],
         },
@@ -930,7 +1070,7 @@
           "</b><small>" +
           (v.d === null
             ? "दूरी अपुष्ट"
-            : "km मगतोरा से" + (v.a ? " (अनुमानित)" : "")) +
+            : "km मगटोरा से" + (v.a ? " (अनुमानित)" : "")) +
           "</small></div></div>" +
           '<span class="chip">🛣️ ' +
           v.s +
@@ -1023,5 +1163,158 @@
       window.addEventListener("hashchange", fromHash);
       fromHash();
     </script>
+    <section class="staff-contacts">
+      <h2 id="staffTitle">डाकघर की टीम</h2>
+      <p id="staffIntro">BPM और ABPM की फोटो व संपर्क जानकारी</p>
+      <div id="officeStatus" class="office-status"></div>
+      <div class="staff-grid">
+        <article class="staff-card">
+          <div class="staff-photo">
+            <img src="assets/bpm-jagat-dev-singh.png" alt="जगत देव सिंह" />
+          </div>
+          <h3 class="boName">जगत देव सिंह</h3>
+          <small>BPM · Branch Postmaster</small>
+          <div class="staff-field">
+            <b class="mobileLabel">मोबाइल नंबर</b>+91 91257 74611
+          </div>
+          <div class="staff-field">
+            <b class="emailLabel">ईमेल</b>bo@example.com
+          </div>
+          <div class="staff-field">
+            <b class="hoursLabel">कार्यालय समय</b>10:00 AM – 2:00 PM (रविवार और राजपत्रित अवकाश पर बंद)
+          </div>
+          <div class="staff-actions">
+            <a href="tel:+919125774611">📞 <span class="callLabel">कॉल</span></a
+            ><a href="https://wa.me/919125774611">💬 WhatsApp</a>
+          </div>
+        </article>
+        <article class="staff-card">
+          <div class="staff-photo">ABPM<br />फोटो</div>
+          <h3 class="abpmName">ABPM का नाम</h3>
+          <small>Assistant Branch Postmaster</small>
+          <div class="staff-field">
+            <b class="mobileLabel">मोबाइल नंबर</b>+91 91257 74611
+          </div>
+          <div class="staff-field">
+            <b class="emailLabel">ईमेल</b>abpm@example.com
+          </div>
+          <div class="staff-field">
+            <b class="hoursLabel">कार्यालय समय</b>10:00 AM – 2:00 PM (रविवार और राजपत्रित अवकाश पर बंद)
+          </div>
+          <div class="staff-actions">
+            <a href="tel:+919125774611">📞 <span class="callLabel">कॉल</span></a
+            ><a href="https://wa.me/919125774611">💬 WhatsApp</a>
+          </div>
+        </article>
+      </div>
+      <div class="address-card">
+        <h3>📍 पोस्ट ऑफिस मगटोरा</h3>
+        <p><b>पिन कोड:</b> 242221</p>
+        <p>
+          <b>पता:</b> शाखा डाकघर मगटोरा, उप डाकघर जलालाबाद, जिला शाहजहाँपुर,
+          उत्तर प्रदेश
+        </p>
+        <a
+          href="https://www.google.com/maps/dir/?api=1&destination=Post+Office+Magtora+242221"
+          >🚗 Directions</a
+        >
+      </div>
+    </section>
+    <script>
+      (function () {
+        var en = false;
+        function status() {
+          var d = new Date(),
+            m = d.getHours() * 60 + d.getMinutes(),
+            o = m >= 600 && m < 840,
+            s = document.getElementById("officeStatus");
+          s.textContent = o
+            ? en
+              ? "Open now · 10:00 AM–2:00 PM"
+              : "अभी खुला है · 10:00 AM–2:00 PM"
+            : en
+              ? "Closed · Opens at 10:00 AM"
+              : "अभी बंद है · सुबह 10:00 बजे खुलेगा";
+          s.classList.toggle("closed", !o);
+        }
+        status();
+        setInterval(status, 60000);
+        document.getElementById("themeToggle").onclick = function () {
+          document.documentElement.dataset.theme =
+            document.documentElement.dataset.theme === "dark"
+              ? "light"
+              : "dark";
+          this.textContent =
+            document.documentElement.dataset.theme === "dark"
+              ? "☀️ Light"
+              : "🌙 Dark";
+        };
+        document.getElementById("languageToggle").onclick = function () {
+          en = !en;
+          this.textContent = en ? "हिन्दी" : "English";
+          document.getElementById("staffTitle").textContent = en
+            ? "Post Office Team"
+            : "डाकघर की टीम";
+          document.getElementById("staffIntro").textContent = en
+            ? "BPM and ABPM photo and contact information"
+            : "B.O. और ABPM की फोटो व संपर्क जानकारी";
+          document.querySelector(".boName").textContent = en
+            ? "Jagat Dev Singh"
+            : "जगत देव सिंह";
+          document.querySelector(".abpmName").textContent = en
+            ? "ABPM Name"
+            : "ABPM का नाम";
+          document
+            .querySelectorAll(".mobileLabel")
+            .forEach(
+              (x) => (x.textContent = en ? "Mobile number" : "मोबाइल नंबर"),
+            );
+          document
+            .querySelectorAll(".emailLabel")
+            .forEach((x) => (x.textContent = en ? "Email" : "ईमेल"));
+          document
+            .querySelectorAll(".hoursLabel")
+            .forEach(
+              (x) => (x.textContent = en ? "Office hours" : "कार्यालय समय"),
+            );
+          document
+            .querySelectorAll(".callLabel")
+            .forEach((x) => (x.textContent = en ? "Call" : "कॉल"));
+          status();
+        };
+      })();
+    </script>
+    <script>
+      (function () {
+        var team = document.querySelector(".staff-contacts"),
+          map = document.querySelector("main");
+        if (team && map) {
+          map.parentNode.insertBefore(team, map);
+        }
+      })();
+    </script>
+    <script>
+      window.MagtoraMapOnSelect = function (v) {
+        var d = document.getElementById("detail");
+        if (!d || !v) return;
+        d.innerHTML =
+          '<div class="dh"><div><h3>' +
+          v.n +
+          '</h3><span class="badge">गाँव विवरण</span></div><div class="dist"><b>' +
+          (v.id === "magtora" ? "0" : "—") +
+          '</b><small>km मगटोरा से</small></div></div><span class="chip">📍 चुना हुआ स्थान</span><ol class="steps"><li>' +
+          v.n +
+          " का मार्ग map पर highlight किया गया है।</li><li>नीचे दिए गए directions और आस-पास के landmarks देखें।</li></ol>";
+      };
+      document.addEventListener("click", function (e) {
+        var item = e.target.closest(".item");
+        if (item && window.MagtoraMap) {
+          var id = item.dataset.id || item.getAttribute("data-id");
+          if (id) MagtoraMap.select(id);
+        }
+      });
+    </script>
   </body>
 </html>
+
+
