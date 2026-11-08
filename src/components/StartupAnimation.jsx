@@ -2,13 +2,18 @@ import { useEffect, useState } from "react";
 
 export default function StartupAnimation({ onDone }) {
   const [leaving, setLeaving] = useState(false);
+  const playAudio = () => {
+    const audio = new Audio('/assets/startup-audio.wav');
+    audio.volume = 0.82;
+    audio.play().catch(() => {});
+  };
   useEffect(() => {
     const exitTimer = setTimeout(() => setLeaving(true), 1900);
-    const doneTimer = setTimeout(onDone, 2350);
+    const doneTimer = setTimeout(() => { playAudio(); onDone(); }, 2350);
     return () => { clearTimeout(exitTimer); clearTimeout(doneTimer); };
   // App ke live clock updates se timer reset nahi hona chahiye.
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-  return <div className={`startup-screen${leaving ? " is-leaving" : ""}`} role="status" aria-label="पोस्ट ऑफिस मगटोरा खुल रहा है">
+  return <div className={`startup-screen${leaving ? " is-leaving" : ""}`} onClick={playAudio} role="status" aria-label="पोस्ट ऑफिस मगटोरा खुल रहा है">
     <div className="startup-content">
       <div className="postal-emblem" aria-hidden="true"><div className="emblem-ring"/><div className="emblem-wing left"/><div className="emblem-wing right"/><div className="emblem-body"/><div className="emblem-line"/></div>
       <div className="startup-route" aria-hidden="true"><span/><i/><b/><em/></div>
