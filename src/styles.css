@@ -1,0 +1,71 @@
+/* ===== PAGE (SPA) styles — as-is ===== */
+:root{--bg:#f6f0e3;--card:#fffdf8;--ink:#14262e;--mut:#66747b;--line:#e6dcc4;--navy:#12303d;--gold:#d9a94a;--red:#d3202a;--blue:#2f6fe0;--green:#2f9e44;--dirt:#c28a45;--main:#4a565d;--sel:#d3202a;--grass:#e7f1d4;--chip:#fff2c7;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a20;--card:#17262e;--ink:#eef2f3;--mut:#9fb0b8;--line:#2a3d47;--navy:#0b141a;--grass:#1a2e22;--chip:#3b3417;--main:#9aa7ad}}
+:root[data-theme="dark"]{--bg:#0f1a20;--card:#17262e;--ink:#eef2f3;--mut:#9fb0b8;--line:#2a3d47;--navy:#0b141a;--grass:#1a2e22;--chip:#3b3417;--main:#9aa7ad}
+html{height:100%}*{box-sizing:border-box}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:Poppins,"Noto Sans Devanagari","FreeSans",system-ui,sans-serif;background-image:radial-gradient(circle at 10% 0,rgba(217,169,74,.18),transparent 40%)}
+header{background:var(--navy);color:#fff;padding:22px clamp(16px,4vw,48px) 26px;border-bottom:4px solid var(--gold)}
+.top{display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;max-width:1280px;margin:auto}
+h1{margin:0;font-size:clamp(26px,4.6vw,44px);line-height:1.15}h1 span{color:#ffd24a}
+.sub{margin:6px 0 0;color:#ecd9a8;font-size:clamp(12px,1.6vw,15px);font-weight:600}
+.stats{display:flex;gap:10px;flex-wrap:wrap}
+.stat{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:8px 14px;text-align:center;min-width:86px}
+.stat b{display:block;font-size:22px;color:#ffd24a}.stat small{font-size:11px;color:#dfe8ea}
+main{max-width:1280px;margin:22px auto 40px;padding:0 clamp(12px,3vw,32px);display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:20px}
+@media(max-width:920px){main{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:0 10px 30px rgba(20,38,46,.08);overflow:hidden}
+.mapwrap{padding:14px}.mhead{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:4px 6px 10px}
+.mhead h2{margin:0;font-size:17px}.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--mut)}
+.legend i{display:inline-block;width:22px;height:6px;border-radius:3px;margin-right:5px;vertical-align:middle}
+svg{width:100%;height:auto;display:block;border-radius:16px;background:var(--grass)}
+.v.dim{opacity:.4}
+.side{display:flex;flex-direction:column;gap:20px}
+.detail{padding:20px;min-height:260px}
+.empty{color:var(--mut);text-align:center;padding:34px 10px}.empty big{display:block;font-size:34px;margin-bottom:6px}
+.dh{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.dh h3{margin:0;font-size:26px;line-height:1.2}.badge{display:inline-block;font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;margin-top:6px;color:#fff}
+.dist{text-align:right}.dist b{font-size:34px;color:var(--red);line-height:1}.dist small{display:block;font-size:11px;color:var(--mut)}
+.chip{display:inline-block;background:var(--chip);border:1px solid #e6c66a;border-radius:10px;padding:3px 10px;font-size:12.5px;font-weight:600;margin:12px 6px 0 0}
+ol.steps{list-style:none;margin:16px 0 0;padding:0;counter-reset:s}
+ol.steps li{position:relative;padding:0 0 14px 42px;font-size:14.5px;line-height:1.5;counter-increment:s}
+ol.steps li:before{content:counter(s);position:absolute;left:0;top:0;width:28px;height:28px;border-radius:50%;background:var(--navy);color:#ffd24a;font-weight:700;font-size:13px;display:grid;place-items:center}
+ol.steps li:not(:last-child):after{content:"";position:absolute;left:13px;top:30px;bottom:2px;width:2px;background:var(--line)}
+.warn{font-size:12px;color:var(--mut);margin-top:4px}
+.listcard{padding:16px}.tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.tools input{flex:1 1 150px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:12px;padding:9px 12px;font:500 14px Poppins,"Noto Sans Devanagari",sans-serif}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}.tabs button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:99px;padding:6px 12px;font:600 12.5px Poppins,"Noto Sans Devanagari",sans-serif;cursor:pointer}
+.tabs button.on{background:var(--navy);color:#ffd24a;border-color:var(--navy)}
+.item{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:none;border:0;border-top:1px solid var(--line);padding:11px 6px;color:var(--ink);cursor:pointer;font:inherit;border-radius:10px}
+.item:hover,.item.on{background:var(--chip)}.item .n{width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;font-size:12px;font-weight:700;display:grid;place-items:center;flex:none}
+.item .t{flex:1}.item .t b{display:block;font-size:15px}.item .t small{color:var(--mut);font-size:12px}.item .d{font-weight:700;color:var(--red)}
+footer{max-width:1280px;margin:0 auto 30px;padding:0 clamp(12px,3vw,32px);color:var(--mut);font-size:12px;line-height:1.6}
+
+/* ===== MAP BLOCK styles — magtora-map-block.html se as-is ===== */
+.mgmap{--bg:#e7f1d4;--card:#fffdf8;--ink:#14262e;--mut:#66747b;--line:#e6dcc4;--navy:#12303d;--gold:#d9a94a;--red:#d3202a;--blue:#2f6fe0;--green:#2f9e44;--dirt:#c28a45;--main:#4a565d;position:relative;font-family:Poppins,"Noto Sans Devanagari",system-ui,sans-serif;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+@media (prefers-color-scheme:dark){.mgmap{--bg:#1a2e22;--card:#17262e;--ink:#eef2f3;--mut:#9fb0b8;--line:#2a3d47;--main:#9aa7ad}}
+.mgmap *{box-sizing:border-box}
+.mg-stage{position:relative;aspect-ratio:800/720;background:var(--bg);touch-action:none;cursor:grab}
+.mg-stage:active{cursor:grabbing}
+.mg-stage svg,.mg-stage iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.mg-stage iframe{display:none}.mgmap.gview .mg-stage iframe{display:block}.mgmap.gview .mg-stage svg{display:none}
+.mg-tools{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px;z-index:3}
+.mg-tools button{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:700 20px/1 Poppins,sans-serif;cursor:pointer;box-shadow:0 3px 8px rgba(0,0,0,.15)}
+.mg-tools button:hover{background:#fff2c7;color:#12303d}
+.mg-zoom{position:absolute;left:10px;bottom:10px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:3px 10px;font-size:12px;font-weight:600;z-index:3}
+.mg-layers{display:flex;gap:6px;flex-wrap:wrap;padding:10px 12px;border-top:1px solid var(--line)}
+.mg-chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:6px 12px;font:600 12.5px Poppins,"Noto Sans Devanagari",sans-serif;cursor:pointer}
+.mg-chip.on{background:var(--navy);color:#ffd24a;border-color:var(--navy)}
+.mg-near{padding:12px 14px;border-top:1px solid var(--line);font-size:13.5px;line-height:1.5}
+.mg-near h4{margin:0 0 6px;font-size:14px}.mg-near a{display:inline-block;margin:4px 6px 0 0;padding:5px 11px;border-radius:99px;background:#fff2c7;color:#3a2a00;border:1px solid #e6c66a;text-decoration:none;font-weight:600;font-size:12.5px}
+.mg-near .lm{display:inline-block;margin:2px 6px 0 0;padding:3px 10px;border-radius:10px;background:var(--bg);font-weight:600;font-size:12.5px}
+.rd{fill:none;stroke-linecap:round;stroke-linejoin:round;transition:opacity .25s}
+.rd.main{stroke:var(--main);stroke-width:15}.rd.blue{stroke:var(--blue);stroke-width:8}.rd.red{stroke:var(--red);stroke-width:8;opacity:.85}.rd.green{stroke:var(--green);stroke-width:8}.rd.dirt{stroke:var(--dirt);stroke-width:8;stroke-dasharray:3 9}
+svg.has .rd{opacity:.22}svg.has .rd.hl{opacity:1}
+.cl{fill:none;stroke:#fff;stroke-width:1.6;stroke-dasharray:9 9;opacity:.8}
+.v{cursor:pointer;outline:none}.v .sc{transform:scale(var(--k,1))}
+.v .pin{fill:var(--red);stroke:#fff;stroke-width:2.5}.v:hover .pin{fill:#ff6a3d}.v.on .pin{fill:#ffb400;stroke:#12303d}
+.v .lb{font:600 12.5px Poppins,sans-serif;fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:4;stroke-linejoin:round}
+.v.on .lb{font-weight:700}.v.on .sc{transform:scale(calc(var(--k,1)*1.25))}
+.lm-g{cursor:pointer}.lm-g .sc{transform:scale(var(--k,1))}.lm-g text{font:600 11px "Noto Sans Devanagari",Poppins,sans-serif;fill:var(--mut);paint-order:stroke;stroke:var(--card);stroke-width:3.5}
+.hide-lm .lm-g,.hide-lb .lb{display:none}

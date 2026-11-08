@@ -1,0 +1,2 @@
+import React from 'react';
+export default function DetailCard({village,hindi}){return <section className="detail-card"><h2>{village.name}</h2><p className="badge">{hindi?'चुना हुआ स्थान':'Selected location'}</p><p>{hindi?`${village.name} का रास्ता map पर highlight किया गया है।`:`${village.name} route is highlighted on the map.`}</p><p>{hindi?'आस-पास के landmarks और directions नीचे देखें।':'See nearby landmarks and directions below.'}</p></section>}

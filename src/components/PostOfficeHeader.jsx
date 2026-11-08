@@ -1,0 +1,2 @@
+import React from 'react';
+export default function PostOfficeHeader({hindi,setHindi,dark,setDark}){return <><div className="toolbar"><button onClick={()=>setDark(!dark)}>{dark?'☀️ Light':'🌙 Dark'}</button><button onClick={()=>setHindi(!hindi)}>{hindi?'English':'हिन्दी'}</button></div><header className="site-header"><h1>{hindi?'पोस्ट ऑफिस मगटोरा':'Post Office Magtora'}</h1><p>{hindi?'शाखा डाकघर • उप डाकघर जलालाबाद • जिला शाहजहाँपुर • पिन 242221':'Branch Post Office • Jalalabad • Shahjahanpur • PIN 242221'}</p></header></>}
