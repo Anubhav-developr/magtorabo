@@ -17,6 +17,8 @@ export default function StartupAnimation({ onDone }) {
     audioRef.current.volume = 0.82;
     const unlock = () => playAudio();
     document.addEventListener('pointerdown', unlock, { once: true, passive: true });
+    document.addEventListener('wheel', unlock, { once: true, passive: true });
+    document.addEventListener('touchstart', unlock, { once: true, passive: true });
     const exitTimer = setTimeout(() => setLeaving(true), 1900);
     const doneTimer = setTimeout(() => { playAudio(); onDone(); }, 2350);
     return () => { clearTimeout(exitTimer); clearTimeout(doneTimer); };
