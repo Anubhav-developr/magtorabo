@@ -1,13 +1,22 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function StartupAnimation({ onDone }) {
   const [leaving, setLeaving] = useState(false);
+  const audioRef = useRef(null);
   const playAudio = () => {
-    const audio = new Audio('/assets/startup-audio.wav');
-    audio.volume = 0.82;
-    audio.play().catch(() => {});
+    if (!audioRef.current) {
+      audioRef.current = new Audio('/assets/startup-audio.wav');
+      audioRef.current.preload = 'auto';
+      audioRef.current.volume = 0.82;
+    }
+    audioRef.current.play().catch(() => {});
   };
   useEffect(() => {
+    audioRef.current = new Audio('/assets/startup-audio.wav');
+    audioRef.current.preload = 'auto';
+    audioRef.current.volume = 0.82;
+    const unlock = () => playAudio();
+    document.addEventListener('pointerdown', unlock, { once: true, passive: true });
     const exitTimer = setTimeout(() => setLeaving(true), 1900);
     const doneTimer = setTimeout(() => { playAudio(); onDone(); }, 2350);
     return () => { clearTimeout(exitTimer); clearTimeout(doneTimer); };
