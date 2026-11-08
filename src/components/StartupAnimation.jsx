@@ -3,22 +3,33 @@ import { useEffect, useRef, useState } from "react";
 export default function StartupAnimation({ onDone }) {
   const [leaving, setLeaving] = useState(false);
   const audioRef = useRef(null);
+  const playedOnce = useRef(false);
+  const playAttempt = useRef(false);
   const playAudio = () => {
     if (!audioRef.current) {
       audioRef.current = new Audio('/assets/startup-audio.wav');
       audioRef.current.preload = 'auto';
       audioRef.current.volume = 0.82;
     }
-    audioRef.current.play().catch(() => {});
+    if (playedOnce.current || playAttempt.current || !audioRef.current.paused) return;
+    playAttempt.current = true;
+    audioRef.current.play().then(() => {
+      playedOnce.current = true;
+      playAttempt.current = false;
+    }).catch(() => {
+      playAttempt.current = false;
+    });
   };
   useEffect(() => {
     audioRef.current = new Audio('/assets/startup-audio.wav');
     audioRef.current.preload = 'auto';
     audioRef.current.volume = 0.82;
     const unlock = () => playAudio();
-    document.addEventListener('pointerdown', unlock, { once: true, passive: true });
-    document.addEventListener('wheel', unlock, { once: true, passive: true });
-    document.addEventListener('touchstart', unlock, { once: true, passive: true });
+    window.addEventListener('click', unlock, { passive: true, capture: true });
+    window.addEventListener('pointerdown', unlock, { passive: true, capture: true });
+    window.addEventListener('wheel', unlock, { passive: true, capture: true });
+    window.addEventListener('touchstart', unlock, { passive: true, capture: true });
+    window.addEventListener('touchmove', unlock, { passive: true, capture: true });
     const exitTimer = setTimeout(() => setLeaving(true), 1900);
     const doneTimer = setTimeout(() => { playAudio(); onDone(); }, 2350);
     return () => { clearTimeout(exitTimer); clearTimeout(doneTimer); };
