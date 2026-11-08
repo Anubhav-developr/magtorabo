@@ -12,6 +12,7 @@ import HolidayCalendar from "./components/HolidayCalendar.jsx";
 import QuickLinks from "./components/QuickLinks.jsx";
 import Footer from "./components/Footer.jsx";
 import StartupAnimation from "./components/StartupAnimation.jsx";
+import ComplaintBook from "./components/ComplaintBook.jsx";
 
 // "#kudra" -> "kudra" (valid id ho tabhi), warna null
 const idFromHash = () => {
@@ -67,6 +68,7 @@ export default function App() {
       </main>
       <main className="wide">
         <QuickLinks />
+        <ComplaintBook />
       </main>
       <HolidayCalendar open={calOpen} onClose={() => setCalOpen(false)} ist={ist} />
       <Footer />
