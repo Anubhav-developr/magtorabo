@@ -6,6 +6,7 @@ export default function Header() {
   const i = title.lastIndexOf(" ");
   return (
     <header>
+      <div className="profile-cover" aria-hidden="true"><img src="/assets/magtora-cover-banner.png" alt="" /></div>
       <div className="top">
         <div>
           <h1>{title.slice(0, i)} <span>{title.slice(i + 1)}</span></h1>

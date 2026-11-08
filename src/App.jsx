@@ -11,6 +11,7 @@ import VillageList from "./components/VillageList.jsx";
 import HolidayCalendar from "./components/HolidayCalendar.jsx";
 import QuickLinks from "./components/QuickLinks.jsx";
 import Footer from "./components/Footer.jsx";
+import StartupAnimation from "./components/StartupAnimation.jsx";
 
 // "#kudra" -> "kudra" (valid id ho tabhi), warna null
 const idFromHash = () => {
@@ -19,6 +20,7 @@ const idFromHash = () => {
 };
 
 export default function App() {
+  const [booting, setBooting] = useState(true);
   const [selectedId, setSelectedId] = useState(idFromHash);
   const [filter, setFilter] = useState("all");
   const [query, setQuery] = useState("");
@@ -45,6 +47,7 @@ export default function App() {
 
   return (
     <>
+      {booting && <StartupAnimation onDone={() => setBooting(false)} />}
       <Toolbar />
       <Header />
       <main className="wide">

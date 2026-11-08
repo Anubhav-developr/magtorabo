@@ -6,6 +6,9 @@ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:en
 html{height:100%}*{box-sizing:border-box}
 body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:Poppins,"Noto Sans Devanagari","FreeSans",system-ui,sans-serif;background-image:radial-gradient(circle at 10% 0,rgba(217,169,74,.18),transparent 40%)}
 header{background:var(--navy);color:#fff;padding:22px clamp(16px,4vw,48px) 26px;border-bottom:4px solid var(--gold)}
+.profile-cover{height:150px;max-width:1280px;margin:-22px auto 22px;overflow:hidden;border-radius:0 0 22px 22px;position:relative;background:var(--navy)}
+.profile-cover:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(9,36,48,.4),transparent 55%,rgba(9,36,48,.08))}
+.profile-cover img{width:100%;height:100%;display:block;object-fit:cover;object-position:center 56%}
 .top{display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;max-width:1280px;margin:auto}
 h1{margin:0;font-size:clamp(26px,4.6vw,44px);line-height:1.15}h1 span{color:#ffd24a}
 .sub{margin:6px 0 0;color:#ecd9a8;font-size:clamp(12px,1.6vw,15px);font-weight:600}
@@ -77,3 +80,18 @@ svg.has .rd{opacity:.22}svg.has .rd.hl{opacity:1}
   .mgmap .v.on .sc{transform:scale(calc(var(--k,1)*1.42))}
   .mgmap .lm-g text{font-size:14px;stroke-width:4px}
 }
+
+/* India Post inspired premium startup screen */
+.startup-screen{position:fixed;inset:0;z-index:3000;display:grid;place-items:center;overflow:hidden;background:#071e2a;color:#fff;animation:startupIn .55s ease-out both}
+.startup-screen:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 42%,#174b5b 0,#0b2b39 34%,#071820 78%)}
+.startup-screen:after{content:"";position:absolute;inset:0;opacity:.13;background-image:linear-gradient(115deg,transparent 0 48%,#f2c24f 48.2% 48.5%,transparent 48.7%),linear-gradient(25deg,transparent 0 63%,#d3202a 63.2% 63.5%,transparent 63.7%);background-size:330px 330px}
+.startup-content{position:relative;z-index:1;text-align:center;animation:startupRise .9s cubic-bezier(.2,.8,.2,1) both}
+.postal-emblem{position:relative;width:104px;height:104px;margin:0 auto 23px;filter:drop-shadow(0 10px 20px #0006);animation:emblemFloat 2s ease-in-out infinite}
+.emblem-ring{position:absolute;inset:3px;border:2px solid #e9b83e;border-radius:50%;box-shadow:0 0 0 7px #e9b83e22,0 0 28px #e9b83e55}
+.emblem-body{position:absolute;left:30px;top:37px;width:44px;height:33px;border:3px solid #fff;border-radius:5px;background:#d3202a;transform:skewY(-8deg)}
+.emblem-body:after{content:"";position:absolute;left:3px;top:2px;width:31px;height:20px;border-left:3px solid #fff;border-bottom:3px solid #fff;transform:rotate(-45deg)}
+.emblem-wing{position:absolute;top:37px;width:27px;height:15px;border-top:4px solid #fff}.emblem-wing.left{left:8px;transform:rotate(24deg)}.emblem-wing.right{right:8px;transform:rotate(-24deg)}
+.emblem-line{position:absolute;left:25px;right:25px;bottom:20px;height:3px;border-radius:2px;background:#e9b83e}
+.startup-route{position:absolute;left:50%;top:105px;width:260px;height:34px;transform:translateX(-50%);opacity:.75}.startup-route:before{content:"";position:absolute;left:0;right:0;top:16px;border-top:1px dashed #e9b83e66}.startup-route span,.startup-route i,.startup-route b,.startup-route em{position:absolute;width:7px;height:7px;border-radius:50%;background:#e9b83e;top:13px;animation:routeMove 1.8s ease-in-out infinite}.startup-route span{left:8px}.startup-route i{left:82px;animation-delay:.2s}.startup-route b{left:160px;animation-delay:.4s}.startup-route em{left:238px;animation-delay:.6s}
+.startup-kicker{font-size:11px;letter-spacing:.22em;color:#e9b83e;font-weight:700}.startup-copy h1{margin:11px 0 4px;font-size:clamp(31px,8vw,52px);letter-spacing:-.03em}.startup-copy h1 strong{color:#e9b83e;font-weight:800}.startup-copy p{margin:0;color:#c1d4d8;font-size:14px}.startup-loader{display:flex;justify-content:center;gap:7px;margin-top:28px}.startup-loader span{width:7px;height:7px;border-radius:50%;background:#d3202a;animation:loaderPulse 1s ease-in-out infinite}.startup-loader span:nth-child(2){animation-delay:.15s;background:#e9b83e}.startup-loader span:nth-child(3){animation-delay:.3s}
+.startup-screen.is-leaving{animation:startupOut .45s ease-in forwards;pointer-events:none}@keyframes startupIn{from{opacity:0}to{opacity:1}}@keyframes startupOut{to{opacity:0;transform:scale(1.04)}}@keyframes startupRise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}@keyframes emblemFloat{50%{transform:translateY(-6px) rotate(1deg)}}@keyframes routeMove{50%{transform:translateY(-5px);box-shadow:0 0 14px #e9b83e}}@keyframes loaderPulse{50%{transform:translateY(-5px);opacity:.5}}@media(prefers-reduced-motion:reduce){.startup-screen *{animation:none!important}.startup-screen{animation:none!important}}
