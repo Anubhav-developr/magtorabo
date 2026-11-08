@@ -69,3 +69,11 @@ svg.has .rd{opacity:.22}svg.has .rd.hl{opacity:1}
 .v.on .lb{font-weight:700}.v.on .sc{transform:scale(calc(var(--k,1)*1.25))}
 .lm-g{cursor:pointer}.lm-g .sc{transform:scale(var(--k,1))}.lm-g text{font:600 11px "Noto Sans Devanagari",Poppins,sans-serif;fill:var(--mut);paint-order:stroke;stroke:var(--card);stroke-width:3.5}
 .hide-lm .lm-g,.hide-lb .lb{display:none}
+
+/* Mobile map: make village names and markers easier to read on narrow screens. */
+@media (max-width:600px){
+  .mgmap .v .lb{font-size:16px;stroke-width:5px}
+  .mgmap .v .sc{transform:scale(calc(var(--k,1)*1.22))}
+  .mgmap .v.on .sc{transform:scale(calc(var(--k,1)*1.42))}
+  .mgmap .lm-g text{font-size:14px;stroke-width:4px}
+}
