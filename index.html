@@ -506,7 +506,8 @@
       display: block;
     }
   </style>
-  <script defer src="map-bridge.js"></script>
+  <script defer src="map-bridge.js"></script><script defer src="calendar.js"></script>
+  <style>.calendar-card{margin-top:18px;padding:18px}.cal-head{display:flex;align-items:center;justify-content:space-between}.cal-head button{width:38px;height:38px;border:0;border-radius:12px;background:var(--navy);color:#fff;font-size:26px}.cal-head strong,.cal-head small{display:block;text-align:center}.cal-head small{color:var(--mut);font-size:11px}.cal-years{display:flex;justify-content:center;gap:7px;margin:14px 0}.cal-years button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:6px 14px}.cal-years .on{background:var(--navy);color:var(--gold)}.cal-week,.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.cal-week span{text-align:center;color:var(--mut);font-size:11px}.cal-day,.cal-empty{min-height:42px;border-radius:10px}.cal-day{border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}.cal-day.holiday{background:#fff2c7;color:#5b4815}.cal-day.selected{outline:2px solid var(--gold)}.cal-day i{display:block;width:5px;height:5px;border-radius:50%;background:var(--red);margin:3px auto}.cal-detail{margin-top:14px;padding:11px;border-radius:12px;background:var(--bg);border:1px solid var(--line)}.cal-detail span{display:block;color:var(--mut);font-size:13px}</style>
   <style>
     .project-tools {
       max-width: 1280px;
@@ -1205,16 +1206,41 @@
           >🚗 Directions</a
         >
       </div>
+      <div class="address-card"><h3>🗓️ डाकघर की छुट्टियाँ</h3><p>रविवार और ऊपर दी गई राजपत्रित छुट्टियों पर पोस्ट ऑफिस बंद रहेगा। आज की छुट्टी का नाम status में दिखेगा।</p><a href="https://www.indiapost.gov.in/holidays-list" target="_blank" rel="noopener">2026 Official India Post List</a><a href="https://www.calendarlabs.com/india-post-holidays-2027/" target="_blank" rel="noopener">2027 Holiday Reference</a></div>
+      <div class="address-card"><h3>🔗 Related Projects</h3><a href="https://postpath.in" target="_blank" rel="noopener">PostPath</a><a href="https://digipinexplorer.vercel.app" target="_blank" rel="noopener">DigiPin Explorer</a></div>
+      <div class="address-card calendar-card"><h3>📅 छुट्टियों का Calendar</h3><div id="holidayCalendar"></div></div>
     </section>
     <script>
       (function () {
         var en = false;
+        var postOfficeHolidays = {
+          "2026-11-08": "Diwali (Deepavali)",
+          "2026-11-24": "Guru Nanak Jayanti",
+          "2026-12-25": "Christmas Day",
+          "2027-01-26": "Republic Day",
+          "2027-03-10": "Eid-ul-Fitr",
+          "2027-03-26": "Good Friday",
+          "2027-04-19": "Mahavir Jayanti",
+          "2027-05-17": "Bakri Id / Eid ul-Adha",
+          "2027-05-20": "Buddha Purnima",
+          "2027-06-15": "Muharram",
+          "2027-08-15": "Milad un Nabi / Independence Day",
+          "2027-10-02": "Mahatma Gandhi Jayanti",
+          "2027-10-10": "Dussehra",
+          "2027-10-29": "Diwali (Deepavali)",
+          "2027-11-14": "Guru Nanak Jayanti",
+          "2027-12-25": "Christmas Day",
+        };
         function status() {
           var d = new Date(),
+            dateKey = d.toISOString().slice(0, 10),
             m = d.getHours() * 60 + d.getMinutes(),
-            o = m >= 600 && m < 840,
+            holiday = postOfficeHolidays[dateKey],
+            o = d.getDay() !== 0 && !holiday && m >= 600 && m < 840,
             s = document.getElementById("officeStatus");
-          s.textContent = o
+          s.textContent = holiday
+            ? en ? "Closed today · " + holiday : "आज बंद है · " + holiday
+            : o
             ? en
               ? "Open now · 10:00 AM–2:00 PM"
               : "अभी खुला है · 10:00 AM–2:00 PM"
