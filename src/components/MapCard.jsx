@@ -1,6 +1,7 @@
 import { forwardRef } from "react";
 import MapBlock from "./map/MapBlock.jsx";
 import { useI18n } from "../i18n/I18nProvider.jsx";
+import IndiaPostNews from "./IndiaPostNews.jsx";
 
 const LEGEND = [["var(--main)", "मुख्य सड़क"], ["var(--red)", "दक्षिण"], ["var(--blue)", "उत्तर"], ["var(--green)", "पश्चिम"], ["var(--dirt)", "कच्चा"]];
 
@@ -17,6 +18,7 @@ const MapCard = forwardRef(function MapCard({ selectedId, onSelect, dimIds }, re
         </div>
       </div>
       <MapBlock ref={ref} selectedId={selectedId} onSelect={onSelect} dimIds={dimIds} />
+      <IndiaPostNews />
     </section>
   );
 });

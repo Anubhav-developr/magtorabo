@@ -13,6 +13,7 @@ import QuickLinks from "./components/QuickLinks.jsx";
 import Footer from "./components/Footer.jsx";
 import StartupAnimation from "./components/StartupAnimation.jsx";
 import ComplaintBook from "./components/ComplaintBook.jsx";
+import IndiaPostPulse from "./components/IndiaPostPulse.jsx";
 
 // "#kudra" -> "kudra" (valid id ho tabhi), warna null
 const idFromHash = () => {
@@ -51,6 +52,7 @@ export default function App() {
       {booting && <StartupAnimation onDone={() => setBooting(false)} />}
       <Toolbar />
       <Header />
+      <IndiaPostPulse />
       <main className="wide">
         <TeamSection ist={ist} syncState={syncState} office={office} onOpenCalendar={() => setCalOpen(true)} />
       </main>
