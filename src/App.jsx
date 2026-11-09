@@ -14,6 +14,8 @@ import Footer from "./components/Footer.jsx";
 import StartupAnimation from "./components/StartupAnimation.jsx";
 import ComplaintBook from "./components/ComplaintBook.jsx";
 import IndiaPostPulse from "./components/IndiaPostPulse.jsx";
+import IndiaPostNews from "./components/IndiaPostNews.jsx";
+import PostalJourney from "./components/PostalJourney.jsx";
 
 // "#kudra" -> "kudra" (valid id ho tabhi), warna null
 const idFromHash = () => {
@@ -56,7 +58,7 @@ export default function App() {
       <main className="wide">
         <TeamSection ist={ist} syncState={syncState} office={office} onOpenCalendar={() => setCalOpen(true)} />
       </main>
-      <main>
+      <main className="map-layout">
         <MapCard ref={mapRef} selectedId={selectedId} onSelect={go} dimIds={dimIds} />
         <div className="side">
           <VillageDetail village={selected} />
@@ -66,6 +68,10 @@ export default function App() {
             query={query} onQuery={setQuery}
             onPick={go}
           />
+        </div>
+        <div className="updates-after-villages">
+          <IndiaPostNews />
+          <PostalJourney />
         </div>
       </main>
       <main className="wide">
