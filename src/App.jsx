@@ -69,8 +69,8 @@ export default function App() {
         </div>
       </main>
       <main className="wide">
-        <QuickLinks />
         <ComplaintBook />
+        <QuickLinks />
       </main>
       <HolidayCalendar open={calOpen} onClose={() => setCalOpen(false)} ist={ist} />
       <Footer />
