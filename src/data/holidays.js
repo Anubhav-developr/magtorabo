@@ -26,6 +26,7 @@ export const DATED = {
   "2026-11-08": { hi: "दीपावली", en: "Diwali" },
   "2026-11-24": { hi: "गुरु नानक जयंती", en: "Guru Nanak Jayanti" },
   "2027-03-10": { hi: "ईद-उल-फितर", en: "Eid-ul-Fitr" },
+  "2027-03-22": { hi: "होली", en: "Holi" },
   "2027-03-26": { hi: "गुड फ्राइडे", en: "Good Friday" },
   "2027-04-19": { hi: "महावीर जयंती", en: "Mahavir Jayanti" },
   "2027-05-17": { hi: "बकरीद", en: "Bakri Id / Eid ul-Adha" },
