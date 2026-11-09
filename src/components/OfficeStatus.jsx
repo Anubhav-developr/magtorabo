@@ -1,5 +1,6 @@
 import { useI18n } from "../i18n/I18nProvider.jsx";
 import { OPEN_MIN, CLOSE_MIN } from "../data/officeConfig.js";
+import { playGuide } from "../utils/audioGuide.js";
 
 const pad = (n) => String(n).padStart(2, "0");
 
@@ -30,7 +31,7 @@ export default function OfficeStatus({ ist, syncState, office, onOpenCalendar })
         <b className="clock">{clock}</b> <small>{t("ist")}</small>
         <small className="sync">{syncLbl}</small>
       </div>
-      <button className="cal-open" onClick={onOpenCalendar}>{t("openCalendar")}</button>
+      <button className="cal-open" onClick={() => { playGuide("calendar"); onOpenCalendar(); }}>{t("openCalendar")}</button>
       <div className="status-next">{t("openHours")}: {t("hours")}{nextTxt ? ` · ${nextTxt}` : ""}</div>
     </div>
   );

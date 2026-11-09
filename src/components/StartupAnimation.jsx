@@ -1,46 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { playGuide } from "../utils/audioGuide.js";
 
 export default function StartupAnimation({ onDone }) {
   const [leaving, setLeaving] = useState(false);
-  const audioRef = useRef(null);
-  const playedOnce = useRef(false);
-  const playAttempt = useRef(false);
-  const playAudio = () => {
-    if (!audioRef.current) {
-      audioRef.current = new Audio('/assets/startup-audio.wav');
-      audioRef.current.preload = 'auto';
-      audioRef.current.volume = 0.82;
-    }
-    if (playedOnce.current || playAttempt.current || !audioRef.current.paused) return;
-    playAttempt.current = true;
-    audioRef.current.play().then(() => {
-      playedOnce.current = true;
-      playAttempt.current = false;
-    }).catch(() => {
-      playAttempt.current = false;
-    });
-  };
   useEffect(() => {
-    audioRef.current = new Audio('/assets/startup-audio.wav');
-    audioRef.current.preload = 'auto';
-    audioRef.current.volume = 0.82;
-    const unlock = () => playAudio();
-    window.addEventListener('click', unlock, { passive: true, capture: true });
-    window.addEventListener('pointerdown', unlock, { passive: true, capture: true });
-    window.addEventListener('wheel', unlock, { passive: true, capture: true });
-    window.addEventListener('touchstart', unlock, { passive: true, capture: true });
-    window.addEventListener('touchmove', unlock, { passive: true, capture: true });
     const exitTimer = setTimeout(() => setLeaving(true), 1900);
-    const doneTimer = setTimeout(() => { playAudio(); onDone(); }, 2350);
+    const doneTimer = setTimeout(() => { playGuide("welcome"); onDone(); }, 2350);
     return () => { clearTimeout(exitTimer); clearTimeout(doneTimer); };
-  // App ke live clock updates se timer reset nahi hona chahiye.
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-  return <div className={`startup-screen${leaving ? " is-leaving" : ""}`} onClick={playAudio} role="status" aria-label="पोस्ट ऑफिस मगटोरा खुल रहा है">
-    <div className="startup-content">
-      <div className="postal-emblem" aria-hidden="true"><div className="emblem-ring"/><div className="emblem-wing left"/><div className="emblem-wing right"/><div className="emblem-body"/><div className="emblem-line"/></div>
-      <div className="startup-route" aria-hidden="true"><span/><i/><b/><em/></div>
-      <div className="startup-copy"><span className="startup-kicker">INDIA POST · DIGITAL DESK</span><h1>मगटोरा <strong>डाकघर</strong></h1><p>आपके गाँवों तक, आपकी सेवा में</p></div>
-      <div className="startup-loader"><span/><span/><span/></div>
-    </div>
+  return <div className={`startup-screen${leaving ? " is-leaving" : ""}`} role="status" aria-label="पोस्ट ऑफिस मगटोरा खुल रहा है">
+    <div className="startup-content"><div className="postal-emblem" aria-hidden="true"><div className="emblem-ring"/><div className="emblem-wing left"/><div className="emblem-wing right"/><div className="emblem-body"/><div className="emblem-line"/></div><div className="startup-route" aria-hidden="true"><span/><i/><b/><em/></div><div className="startup-copy"><span className="startup-kicker">INDIA POST · DIGITAL DESK</span><h1>मगटोरा <strong>डाकघर</strong></h1><p>आपके गाँवों तक, आपकी सेवा में</p></div><div className="startup-loader"><span/><span/><span/></div></div>
   </div>;
 }
