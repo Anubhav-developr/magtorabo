@@ -16,7 +16,7 @@ import ComplaintBook from "./components/ComplaintBook.jsx";
 import IndiaPostPulse from "./components/IndiaPostPulse.jsx";
 import IndiaPostNews from "./components/IndiaPostNews.jsx";
 import PostalJourney from "./components/PostalJourney.jsx";
-import { playGuide } from "./utils/audioGuide.js";
+import { playContext } from "./utils/audioGuide.js";
 
 // "#kudra" -> "kudra" (valid id ho tabhi), warna null
 const idFromHash = () => {
@@ -39,7 +39,7 @@ export default function App() {
   const go = (id) => {
     try { history.replaceState(null, "", "#" + id); } catch (e) { location.hash = id; }
     setSelectedId(id);
-    playGuide(id === "magtora" ? "magtora" : "village");
+    playContext(id === "magtora" ? "magtora" : "village");
   };
 
   useEffect(() => {

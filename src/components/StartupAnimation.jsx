@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import { playGuide } from "../utils/audioGuide.js";
 
 export default function StartupAnimation({ onDone }) {
   const [leaving, setLeaving] = useState(false);
   useEffect(() => {
     const exitTimer = setTimeout(() => setLeaving(true), 1900);
-    const doneTimer = setTimeout(() => { playGuide("welcome"); onDone(); }, 2350);
+    const doneTimer = setTimeout(onDone, 2350);
     return () => { clearTimeout(exitTimer); clearTimeout(doneTimer); };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   return <div className={`startup-screen${leaving ? " is-leaving" : ""}`} role="status" aria-label="पोस्ट ऑफिस मगटोरा खुल रहा है">

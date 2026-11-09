@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useI18n } from "../i18n/I18nProvider.jsx";
-import { playGuide } from "../utils/audioGuide.js";
+import { playContext } from "../utils/audioGuide.js";
 
 const RECEIVER = "anubhavm1234@gmail.com";
 
@@ -31,7 +31,7 @@ export default function ComplaintBook() {
 
   const close = () => { setOpen(false); setSent(false); };
   return <>
-    <section className="complaint-book card"><div className="complaint-heading"><div><span className="complaint-kicker">{hi ? "आपकी आवाज़ महत्वपूर्ण है" : "Your voice matters"}</span><h2>📝 {hi ? "शिकायत पुस्तिका" : "Complaint Book"}</h2><p>{hi ? "समस्या, वित्तीय शिकायत या डाक संबंधी जानकारी दर्ज करें।" : "Report an issue, financial concern or mail-related problem."}</p></div><div className="complaint-seal">✉</div></div><button className="complaint-trigger" onClick={() => { playGuide("complaint"); setOpen(true); }}>✍️ {hi ? "शिकायत दर्ज करें" : "Register a complaint"}<span>→</span></button></section>
+    <section className="complaint-book card"><div className="complaint-heading"><div><span className="complaint-kicker">{hi ? "आपकी आवाज़ महत्वपूर्ण है" : "Your voice matters"}</span><h2>📝 {hi ? "शिकायत पुस्तिका" : "Complaint Book"}</h2><p>{hi ? "समस्या, वित्तीय शिकायत या डाक संबंधी जानकारी दर्ज करें।" : "Report an issue, financial concern or mail-related problem."}</p></div><div className="complaint-seal">✉</div></div><button className="complaint-trigger" onClick={() => { playContext("complaint"); setOpen(true); }}>✍️ {hi ? "शिकायत दर्ज करें" : "Register a complaint"}<span>→</span></button></section>
     {open && <div className="complaint-overlay" onMouseDown={(e) => e.target === e.currentTarget && close()}><section className="complaint-modal" role="dialog" aria-modal="true" aria-labelledby="complaint-title"><button className="complaint-close" onClick={close} aria-label={hi ? "बंद करें" : "Close"}>×</button><div className="modal-heading"><span className="complaint-kicker">{hi ? "शिकायत पुस्तिका" : "Complaint Book"}</span><h2 id="complaint-title">{hi ? "हम आपकी मदद करेंगे" : "We are here to help"}</h2><p>{hi ? "कृपया नीचे सही जानकारी भरें।" : "Please provide the details below."}</p></div><form onSubmit={submit}>
       <label className="category-label">{hi ? "शिकायत का प्रकार" : "Complaint type"}<select required value={form.category} onChange={update("category")}><option value="">{hi ? "पहले शिकायत का प्रकार चुनें" : "Choose complaint type first"}</option><option>{hi ? "💰 वित्तीय समस्या" : "💰 Financial issue"}</option><option>{hi ? "📬 डाक नहीं मिली" : "📬 Mail not received"}</option><option>{hi ? "⏳ डाक पहुँचने में देरी" : "⏳ Delivery delay"}</option><option>{hi ? "👥 सेवा/स्टाफ संबंधी" : "👥 Service / staff issue"}</option><option>{hi ? "💡 अन्य सुझाव" : "💡 Other suggestion"}</option></select></label>
       <label>{hi ? "आपका नाम" : "Your name"}<input required value={form.name} onChange={update("name")} /></label>

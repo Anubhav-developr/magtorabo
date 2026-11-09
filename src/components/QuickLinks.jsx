@@ -1,6 +1,6 @@
 import { useI18n } from "../i18n/I18nProvider.jsx";
 import { DIGIPIN_URL, POSTPATH_URL } from "../data/links.js";
-import { playGuide } from "../utils/audioGuide.js";
+import { playContext } from "../utils/audioGuide.js";
 
 export default function QuickLinks() {
   const { t } = useI18n();
@@ -13,7 +13,7 @@ export default function QuickLinks() {
       <h2>🔗 {t("quickLinks")}</h2>
       <div className="link-grid">
         {items.map((it) => (
-          <a key={it.key} className="link-tile" onClick={() => playGuide("links")} href={it.url || undefined} aria-disabled={!it.url} target="_blank" rel="noopener noreferrer">
+          <a key={it.key} className="link-tile" onClick={() => playContext("links")} href={it.url || undefined} aria-disabled={!it.url} target="_blank" rel="noopener noreferrer">
             <span className="ic">{it.icon}</span>
             <span><b>{it.title}</b><small>{it.url ? it.desc : t("linkNotSet")}</small></span>
           </a>
