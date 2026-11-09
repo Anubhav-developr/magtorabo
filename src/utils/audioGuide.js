@@ -2,6 +2,15 @@ const GUIDE_FILES = { welcome: "/audio/welcome.wav", calendar: "/audio/calendar.
 let currentAudio = null;
 const played = new Set();
 let welcomed = false;
+const audioCache = new Map();
+
+// Page load ke waqt audio objects warm kar dete hain, taaki first click par network/decode delay kam ho.
+Object.entries(GUIDE_FILES).forEach(([key, src]) => {
+  const audio = new Audio(src);
+  audio.preload = "auto";
+  audioCache.set(key, audio);
+  audio.load();
+});
 export function playGuide(key, { once = true } = {}) {
   if (once && played.has(key)) return;
   const src = GUIDE_FILES[key]; if (!src) return;
@@ -15,7 +24,8 @@ export function playContext(key) {
     const src = GUIDE_FILES[name];
     if (!src) return resolve();
     if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
-    const audio = new Audio(src); audio.volume = 0.86; currentAudio = audio;
+    const audio = audioCache.get(name) || new Audio(src);
+    audio.preload = "auto"; audio.volume = 0.86; audio.currentTime = 0; currentAudio = audio;
     audio.onended = resolve;
     audio.onerror = resolve;
     audio.play().catch(resolve);
