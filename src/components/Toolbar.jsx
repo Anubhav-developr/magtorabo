@@ -4,7 +4,8 @@ import { useI18n } from "../i18n/I18nProvider.jsx";
 // Theme + language toggle (aapke app.js ke #theme / #language buttons)
 export default function Toolbar() {
   const { lang, setLang, t } = useI18n();
-  const [theme, setTheme] = useState(() => (window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
+  // Site default light rahega; device ki dark preference ko automatic override nahi karenge.
+  const [theme, setTheme] = useState("light");
   useEffect(() => { document.documentElement.dataset.theme = theme; }, [theme]);
   return (
     <div className="toolbar">

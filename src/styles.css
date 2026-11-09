@@ -3,6 +3,7 @@
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a20;--card:#17262e;--ink:#eef2f3;--mut:#9fb0b8;--line:#2a3d47;--navy:#0b141a;--grass:#1a2e22;--chip:#3b3417;--main:#9aa7ad}}
 :root[data-theme="dark"]{--bg:#0f1a20;--card:#17262e;--ink:#eef2f3;--mut:#9fb0b8;--line:#2a3d47;--navy:#0b141a;--grass:#1a2e22;--chip:#3b3417;--main:#9aa7ad}
+:root[data-theme="light"] .mgmap{--bg:#e7f1d4;--card:#fffdf8;--ink:#14262e;--mut:#66747b;--line:#e6dcc4;--navy:#12303d;--gold:#d9a94a;--red:#d3202a;--blue:#2f6fe0;--green:#2f9e44;--dirt:#c28a45;--main:#4a565d}
 html{height:100%}*{box-sizing:border-box}
 body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:Poppins,"Noto Sans Devanagari","FreeSans",system-ui,sans-serif;background-image:radial-gradient(circle at 10% 0,rgba(217,169,74,.18),transparent 40%)}
 header{background:var(--navy);color:#fff;padding:22px clamp(16px,4vw,48px) 26px;border-bottom:4px solid var(--gold)}
@@ -80,6 +81,11 @@ svg.has .rd{opacity:.22}svg.has .rd.hl{opacity:1}
   .mgmap .v.on .sc{transform:scale(calc(var(--k,1)*1.42))}
   .mgmap .lm-g text{font-size:14px;stroke-width:4px}
 }
+
+/* Explicit theme colors keep the map controls and nearby panel in sync with the site toggle. */
+:root[data-theme="dark"] .mgmap{--bg:#1a2e22;--card:#17262e;--ink:#eef2f3;--mut:#9fb0b8;--line:#2a3d47;--navy:#0b141a;--gold:#d9a94a;--main:#9aa7ad}
+:root[data-theme="dark"] .mg-near a{background:#3b3417;color:#ffe3a3;border-color:#6b5a1d}
+:root[data-theme="dark"] .mg-near .lm{background:#1a2e22;color:#eef2f3}
 
 /* India Post inspired premium startup screen */
 .startup-screen{position:fixed;inset:0;z-index:3000;display:grid;place-items:center;overflow:hidden;background:#071e2a;color:#fff;animation:startupIn .55s ease-out both}
