@@ -60,6 +60,13 @@ footer{max-width:1280px;margin:0 auto 30px;padding:0 clamp(12px,3vw,32px);color:
 .mg-tools{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px;z-index:3}
 .mg-tools button{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:700 20px/1 Poppins,sans-serif;cursor:pointer;box-shadow:0 3px 8px rgba(0,0,0,.15)}
 .mg-tools button:hover{background:#fff2c7;color:#12303d}
+.map-fullscreen{position:fixed;inset:clamp(10px,3vw,42px);z-index:1000;display:flex;flex-direction:column;border:1px solid rgba(217,169,74,.55);border-radius:28px;box-shadow:0 28px 90px rgba(0,0,0,.55),0 0 0 100vmax rgba(5,14,20,.72);background:var(--card);overflow:hidden;animation:map-pop .22s ease-out}
+.map-fullscreen::before{content:"";position:fixed;inset:0;z-index:-1;background:rgba(5,14,20,.72);backdrop-filter:blur(8px)}
+.map-fullscreen-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:15px 20px;background:linear-gradient(120deg,#102f3b,#173f4b);color:#fff;border-bottom:1px solid rgba(217,169,74,.45)}
+.map-fullscreen-head div{display:flex;flex-direction:column;gap:2px}.map-fullscreen-kicker{font-size:10px;letter-spacing:.16em;color:#e5b957;font-weight:800}.map-fullscreen-head strong{font-size:18px}.map-fullscreen-head button{width:38px;height:38px;border:1px solid rgba(255,255,255,.28);border-radius:50%;background:rgba(255,255,255,.1);color:#fff;font-size:27px;line-height:1;cursor:pointer}.map-fullscreen-head button:hover{background:#d3202a}
+.map-fullscreen .mg-stage{flex:1;min-height:0;aspect-ratio:auto}.map-fullscreen .mg-layers,.map-fullscreen .mg-near{flex-shrink:0}
+@keyframes map-pop{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
+@media (max-width:600px){.map-fullscreen{inset:8px;border-radius:20px}.map-fullscreen-head{padding:12px 14px}.map-fullscreen-head strong{font-size:15px}.map-fullscreen .mg-stage{min-height:48vh}}
 .mg-zoom{position:absolute;left:10px;bottom:10px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:3px 10px;font-size:12px;font-weight:600;z-index:3}
 .mg-layers{display:flex;gap:6px;flex-wrap:wrap;padding:10px 12px;border-top:1px solid var(--line)}
 .mg-chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:6px 12px;font:600 12.5px Poppins,"Noto Sans Devanagari",sans-serif;cursor:pointer}

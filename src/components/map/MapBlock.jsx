@@ -23,6 +23,7 @@ const MapBlock = forwardRef(function MapBlock(
 ) {
   const svgRef = useRef(null), stageRef = useRef(null);
   const [layers, setLayers] = useState({ landmarks: true, labels: true, google: false });
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const { view, viewRef, zoomIn, zoomOut, reset, animateTo } = useMapView(svgRef, stageRef);
 
   const sel = villages.find((v) => v.id === selectedId) || null;
@@ -40,11 +41,21 @@ const MapBlock = forwardRef(function MapBlock(
 
   useImperativeHandle(ref, () => ({ select: (id) => onSelect && onSelect(id), zoomIn, zoomOut, reset }));
 
+  useEffect(() => {
+    if (!isFullscreen) return undefined;
+    const closeOnEscape = (event) => { if (event.key === "Escape") setIsFullscreen(false); };
+    document.addEventListener("keydown", closeOnEscape);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.removeEventListener("keydown", closeOnEscape); document.body.style.overflow = previousOverflow; };
+  }, [isFullscreen]);
+
   const highlighted = sel ? sel.r : [];
   const svgClass = [sel ? "has" : "", !layers.landmarks ? "hide-lm" : "", !layers.labels ? "hide-lb" : ""].filter(Boolean).join(" ");
 
   return (
-    <div className={"mgmap" + (layers.google ? " gview" : "")} id="mg-map-root">
+    <div className={["mgmap", layers.google ? "gview" : "", isFullscreen ? "map-fullscreen" : ""].filter(Boolean).join(" ")} id="mg-map-root" role={isFullscreen ? "dialog" : undefined} aria-modal={isFullscreen ? "true" : undefined}>
+      {isFullscreen && <div className="map-fullscreen-head"><div><span className="map-fullscreen-kicker">INTERACTIVE MAP</span><strong>मगटोरा गाँव मार्गदर्शिका</strong></div><button type="button" aria-label="Close fullscreen map" onClick={() => setIsFullscreen(false)}>×</button></div>}
       <div className="mg-stage" id="mg-stage" ref={stageRef}>
         <svg
           id="mg-svg"
@@ -67,7 +78,7 @@ const MapBlock = forwardRef(function MapBlock(
           referrerPolicy="no-referrer-when-downgrade"
           src={layers.google ? "https://www.google.com/maps?q=" + gq() + "&z=15&output=embed" : undefined} // key ki zarurat nahi
         />
-        <MapToolbar zoomLabel={Math.round((BASE.w / view.w) * 100) + "%"} onIn={zoomIn} onOut={zoomOut} onFit={reset} />
+        <MapToolbar zoomLabel={Math.round((BASE.w / view.w) * 100) + "%"} onIn={zoomIn} onOut={zoomOut} onFullscreen={() => setIsFullscreen((value) => !value)} onReset={reset} isFullscreen={isFullscreen} />
       </div>
       <MapLayers layers={layers} onToggle={(k) => setLayers((s) => ({ ...s, [k]: !s[k] }))} />
       <MapNearby village={sel} landmarks={landmarks} gq={gq} />
